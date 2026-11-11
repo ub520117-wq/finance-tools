@@ -1,0 +1,1194 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <meta name="color-scheme" content="light dark" />
+    <meta name="description" content="Free finance calculators: EMI calculator, loan amortization and prepayment calculator, compound interest calculator and savings goal calculator — with formulas, worked examples, guides and FAQs." />
+    <link rel="icon" href="data:," />
+    <title>Finance Tools — EMI, Loan, Compound Interest &amp; Savings Calculators</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Newsreader:opsz,wght@6..72,500;6..72,600;6..72,700&family=Public+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@500;600&display=swap" rel="stylesheet" />
+    <style>
+      :root{
+        --bg:#eef3ee;
+        --surface:#ffffff;
+        --surface-2:#e4ede4;
+        --ink:#12211a;
+        --muted:#4b5d53;
+        --line:#cfdbd0;
+        --accent:#0b6b4a;
+        --accent-strong:#084c34;
+        --accent-soft:#dcefe3;
+        --gold:#a9760d;
+        --gold-soft:#f3e5c3;
+        --red:#b23a2a;
+        --chart-b:#d9a441;
+        --focus:#0b6b4a;
+        --shadow:0 1px 2px rgba(18,33,26,.06),0 8px 24px rgba(18,33,26,.06);
+      }
+      @media (prefers-color-scheme: dark){
+        :root{
+          --bg:#0c120e;
+          --surface:#141d16;
+          --surface-2:#1b261e;
+          --ink:#e8f0ea;
+          --muted:#a4b6aa;
+          --line:#2b3d30;
+          --accent:#3ec98c;
+          --accent-strong:#7fe0b2;
+          --accent-soft:#173528;
+          --gold:#e2ac3d;
+          --gold-soft:#33270e;
+          --red:#e07a63;
+          --chart-b:#e2ac3d;
+          --focus:#3ec98c;
+          --shadow:0 1px 2px rgba(0,0,0,.4),0 8px 24px rgba(0,0,0,.35);
+        }
+      }
+      *{box-sizing:border-box}
+      html{scroll-behavior:smooth}
+      body{
+        margin:0;background:var(--bg);color:var(--ink);
+        font-family:"Public Sans",system-ui,sans-serif;
+        font-size:16px;line-height:1.6;
+        -webkit-font-smoothing:antialiased;
+      }
+      h1,h2,h3{font-family:"Newsreader",Georgia,serif;line-height:1.15;margin:0}
+      a{color:var(--accent);text-underline-offset:2px}
+      a:focus-visible,button:focus-visible,input:focus-visible,select:focus-visible,summary:focus-visible{
+        outline:2px solid var(--focus);outline-offset:2px;border-radius:4px;
+      }
+      .mono{font-family:"IBM Plex Mono",ui-monospace,monospace}
+      .wrap{max-width:1120px;margin:0 auto;padding:0 20px}
+
+      /* ---------- top bar ---------- */
+      .topbar{
+        position:sticky;top:0;z-index:50;
+        background:var(--surface);border-bottom:1px solid var(--line);
+      }
+      .topbar-in{display:flex;align-items:center;gap:18px;min-height:58px;flex-wrap:wrap;padding-top:6px;padding-bottom:6px}
+      .brand{font-family:"Newsreader",Georgia,serif;font-weight:700;font-size:1.3rem;color:var(--ink);text-decoration:none;white-space:nowrap}
+      .brand span{color:var(--accent)}
+      .topnav{display:flex;gap:4px;flex-wrap:wrap;margin-left:auto}
+      .topnav a{
+        color:var(--muted);text-decoration:none;font-size:.92rem;font-weight:600;
+        padding:6px 10px;border-radius:999px;
+      }
+      .topnav a:hover{color:var(--ink);background:var(--surface-2)}
+
+      /* ---------- hero ---------- */
+      .hero{padding:44px 0 8px}
+      .hero h1{font-size:clamp(2rem,5.2vw,3.3rem);font-weight:700;max-width:16em}
+      .hero h1 em{font-style:italic;color:var(--accent)}
+      .hero p{color:var(--muted);font-size:1.08rem;max-width:44em;margin:16px 0 0}
+      .hero-jumps{display:flex;flex-wrap:wrap;gap:10px;margin-top:22px}
+      .hero-jumps a{
+        text-decoration:none;font-weight:600;font-size:.95rem;color:var(--ink);
+        background:var(--surface);border:1px solid var(--line);border-radius:10px;
+        padding:10px 16px;box-shadow:var(--shadow);
+      }
+      .hero-jumps a:hover{border-color:var(--accent);color:var(--accent)}
+
+      /* ---------- tool shell ---------- */
+      .tools-head{display:flex;align-items:end;justify-content:space-between;gap:16px;flex-wrap:wrap;margin:38px 0 14px}
+      .tools-head h2{font-size:1.7rem}
+      .currency-ctl{display:flex;align-items:center;gap:8px;font-size:.92rem;color:var(--muted);font-weight:600}
+      .currency-ctl select{
+        font:inherit;color:var(--ink);background:var(--surface);
+        border:1px solid var(--line);border-radius:8px;padding:7px 10px;
+      }
+      .tabs{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:0}
+      .tab{
+        font:inherit;font-weight:600;font-size:.98rem;cursor:pointer;
+        padding:11px 18px;border-radius:12px 12px 0 0;
+        border:1px solid var(--line);border-bottom:none;
+        background:var(--surface-2);color:var(--muted);
+      }
+      .tab[aria-selected="true"]{background:var(--surface);color:var(--ink);box-shadow:inset 0 3px 0 var(--accent)}
+      .panel{
+        background:var(--surface);border:1px solid var(--line);border-radius:0 14px 14px 14px;
+        box-shadow:var(--shadow);padding:26px;
+      }
+      .panel[hidden]{display:none}
+      .panel-grid{display:grid;grid-template-columns:1fr 1fr;gap:34px}
+      .panel h3{font-size:1.45rem;margin-bottom:6px}
+      .panel .lede{color:var(--muted);margin:0 0 20px;font-size:.97rem}
+      .field{margin-bottom:18px}
+      .field-top{display:flex;justify-content:space-between;align-items:baseline;gap:12px;margin-bottom:6px}
+      .field label{font-weight:600;font-size:.94rem}
+      .num-wrap{display:flex;align-items:center;gap:6px}
+      .num-wrap .cur{color:var(--muted);font-size:.9rem}
+      .num-wrap input[type="number"]{
+        width:128px;font:inherit;font-family:"IBM Plex Mono",monospace;font-size:.98rem;text-align:right;
+        padding:7px 9px;border:1px solid var(--line);border-radius:8px;background:var(--bg);color:var(--ink);
+      }
+      .num-wrap input[type="number"].small{width:84px}
+      input[type="range"]{width:100%;accent-color:var(--accent);height:28px;cursor:pointer}
+      .field select{
+        font:inherit;color:var(--ink);background:var(--bg);
+        border:1px solid var(--line);border-radius:8px;padding:8px 10px;width:100%;
+      }
+      .hint{font-size:.85rem;color:var(--muted);margin-top:2px}
+
+      .results{background:var(--surface-2);border-radius:12px;padding:20px}
+      .big-result{margin-bottom:14px}
+      .big-result .k{font-size:.85rem;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--muted)}
+      .big-result .v{font-family:"IBM Plex Mono",monospace;font-size:clamp(1.7rem,4vw,2.3rem);font-weight:600;line-height:1.15;color:var(--ink)}
+      .kv{display:flex;justify-content:space-between;gap:14px;padding:9px 0;border-top:1px solid var(--line);font-size:.97rem}
+      .kv dt{color:var(--muted)}
+      .kv dd{margin:0;font-family:"IBM Plex Mono",monospace;font-weight:600;text-align:right}
+      .kv dd.good{color:var(--accent)}
+      .chart-box{margin-top:16px}
+      .chart-box svg{width:100%;height:auto;display:block}
+      .legend{display:flex;gap:18px;flex-wrap:wrap;font-size:.88rem;color:var(--muted);margin-top:8px}
+      .legend i{display:inline-block;width:11px;height:11px;border-radius:3px;margin-right:6px;vertical-align:-1px}
+      .progress{height:12px;border-radius:999px;background:var(--bg);border:1px solid var(--line);overflow:hidden;margin-top:6px}
+      .progress > div{height:100%;background:var(--accent);border-radius:999px;transition:width .3s ease}
+      details.table-toggle{margin-top:18px}
+      details.table-toggle summary{cursor:pointer;font-weight:600;color:var(--accent)}
+      table{border-collapse:collapse;width:100%;margin-top:12px;font-size:.9rem}
+      th,td{padding:7px 8px;border-bottom:1px solid var(--line);text-align:right;font-family:"IBM Plex Mono",monospace}
+      th{font-family:"Public Sans",sans-serif;font-weight:700;color:var(--muted);font-size:.8rem;text-transform:uppercase;letter-spacing:.04em}
+      th:first-child,td:first-child{text-align:left}
+      .note{font-size:.88rem;color:var(--muted);margin-top:14px}
+
+      /* ---------- content sections ---------- */
+      section.block{padding:44px 0 6px}
+      .block-head{max-width:46em}
+      .block-head h2{font-size:1.85rem;margin-bottom:8px}
+      .block-head p{color:var(--muted);margin:0}
+      .guide-grid{display:grid;grid-template-columns:1fr 1fr;gap:22px;margin-top:24px}
+      .card{
+        background:var(--surface);border:1px solid var(--line);border-radius:14px;
+        padding:24px;box-shadow:var(--shadow);
+      }
+      .card h3{font-size:1.3rem;margin-bottom:8px}
+      .card p{color:var(--muted);margin:0 0 12px}
+      .card p:last-child{margin-bottom:0}
+      .formula{
+        font-family:"IBM Plex Mono",monospace;font-size:.95rem;
+        background:var(--accent-soft);color:var(--ink);
+        border-radius:10px;padding:14px 16px;margin:12px 0;overflow-wrap:anywhere;
+      }
+      .example{
+        border-left:3px solid var(--gold);background:var(--gold-soft);
+        border-radius:0 10px 10px 0;padding:12px 16px;margin:12px 0;font-size:.95rem;
+      }
+      .example strong{display:block;margin-bottom:4px}
+      .card ul{margin:0;padding-left:20px;color:var(--muted)}
+      .card li{margin-bottom:6px}
+      .card a.more{font-weight:600}
+
+      article.long{
+        background:var(--surface);border:1px solid var(--line);border-radius:14px;
+        box-shadow:var(--shadow);margin-top:22px;overflow:hidden;
+      }
+      article.long summary{
+        cursor:pointer;list-style:none;padding:22px 24px;display:block;
+      }
+      article.long summary::-webkit-details-marker{display:none}
+      article.long summary h3{display:inline;font-size:1.35rem}
+      article.long summary .dek{display:block;color:var(--muted);margin-top:6px;font-size:.97rem}
+      article.long summary .open-hint{color:var(--accent);font-weight:600;font-size:.9rem}
+      article.long .body{padding:0 24px 24px;max-width:52em}
+      article.long .body p{color:var(--muted);margin:0 0 14px}
+      article.long .body p strong,article.long .body li strong{color:var(--ink)}
+      article.long .body h4{font-family:"Newsreader",Georgia,serif;font-size:1.12rem;margin:20px 0 8px;color:var(--ink)}
+      article.long .body ul,article.long .body ol{color:var(--muted);padding-left:22px;margin:0 0 14px}
+      article.long .body li{margin-bottom:7px}
+
+      .faq details{
+        background:var(--surface);border:1px solid var(--line);border-radius:12px;
+        margin-top:12px;box-shadow:var(--shadow);
+      }
+      .faq summary{cursor:pointer;font-weight:600;padding:16px 20px;list-style:none}
+      .faq summary::-webkit-details-marker{display:none}
+      .faq .a{padding:0 20px 18px;color:var(--muted);max-width:52em}
+      .faq .a p{margin:0 0 10px}
+      .faq .a p:last-child{margin-bottom:0}
+
+      .policy{
+        background:var(--surface);border:1px solid var(--line);border-radius:14px;
+        box-shadow:var(--shadow);margin-top:18px;overflow:hidden;
+      }
+      .policy summary{cursor:pointer;list-style:none;padding:20px 24px;font-family:"Newsreader",Georgia,serif;font-size:1.3rem;font-weight:600}
+      .policy summary::-webkit-details-marker{display:none}
+      .policy .body{padding:0 24px 24px;max-width:54em;color:var(--muted)}
+      .policy .body p{margin:0 0 12px}
+      .policy .body h4{color:var(--ink);font-family:"Newsreader",Georgia,serif;font-size:1.08rem;margin:18px 0 6px}
+      .policy .body ul{padding-left:22px;margin:0 0 12px}
+      .policy .body li{margin-bottom:6px}
+      .policy .body strong{color:var(--ink)}
+
+      .contact-grid{display:grid;grid-template-columns:1fr 1fr;gap:22px;margin-top:24px}
+      .contact-form label{display:block;font-weight:600;font-size:.94rem;margin-bottom:14px}
+      .contact-form input,.contact-form textarea{
+        display:block;width:100%;margin-top:6px;font:inherit;font-weight:400;
+        padding:10px 12px;border:1px solid var(--line);border-radius:8px;background:var(--bg);color:var(--ink);
+      }
+      .btn{
+        font:inherit;font-weight:700;cursor:pointer;border:none;border-radius:10px;
+        background:var(--accent);color:#fff;padding:12px 22px;
+      }
+      @media (prefers-color-scheme: dark){.btn{color:#08130d}}
+      .btn:hover{background:var(--accent-strong)}
+      .form-status{font-size:.92rem;color:var(--accent);margin-top:10px;min-height:1.4em}
+
+      footer{margin-top:56px;border-top:1px solid var(--line);background:var(--surface)}
+      .foot-in{padding:30px 0 40px;display:grid;grid-template-columns:2fr 1fr 1fr;gap:26px}
+      footer h4{font-family:"Newsreader",Georgia,serif;margin:0 0 10px;font-size:1.05rem}
+      footer p{color:var(--muted);font-size:.92rem;margin:0}
+      footer ul{list-style:none;margin:0;padding:0}
+      footer li{margin-bottom:7px}
+      footer a{color:var(--muted);text-decoration:none;font-size:.94rem}
+      footer a:hover{color:var(--accent);text-decoration:underline}
+      .fineprint{border-top:1px solid var(--line);padding:16px 0 26px;color:var(--muted);font-size:.85rem}
+
+      @media (max-width:820px){
+        .panel-grid,.guide-grid,.contact-grid{grid-template-columns:1fr}
+        .panel{padding:20px 16px;border-radius:0 0 14px 14px}
+        .tab{border-radius:10px;border-bottom:1px solid var(--line);flex:1 1 42%;text-align:center;padding:10px 8px}
+        .tab[aria-selected="true"]{box-shadow:inset 0 0 0 2px var(--accent)}
+        .foot-in{grid-template-columns:1fr}
+        .hero{padding-top:30px}
+        th,td{padding:6px 5px;font-size:.82rem}
+      }
+      @media (prefers-reduced-motion: reduce){
+        html{scroll-behavior:auto}
+        .progress > div{transition:none}
+      }
+    </style>
+  </head>
+  <body>
+    <header class="topbar">
+      <div class="wrap topbar-in">
+        <a class="brand" href="#top">Finance<span>Tools</span></a>
+        <nav class="topnav" aria-label="Site">
+          <a href="#calculators">Calculators</a>
+          <a href="#guides">Guides</a>
+          <a href="#articles">Articles</a>
+          <a href="#faq">FAQ</a>
+          <a href="#about">About</a>
+          <a href="#privacy">Privacy</a>
+          <a href="#contact">Contact</a>
+        </nav>
+      </div>
+    </header>
+
+    <main id="top" class="wrap">
+      <div class="hero">
+        <h1>Money maths, <em>worked out in the open.</em></h1>
+        <p>Four free calculators for the questions people actually ask about loans and savings: What will my monthly EMI be? What does this loan really cost if I pay a little extra? What will my savings grow into? Every result shows the formula and the full breakdown behind it — no sign-up, nothing leaves your browser.</p>
+        <div class="hero-jumps">
+          <a href="#calculators" data-jump="emi">EMI Calculator</a>
+          <a href="#calculators" data-jump="loan">Loan &amp; Prepayment</a>
+          <a href="#calculators" data-jump="compound">Compound Interest</a>
+          <a href="#calculators" data-jump="savings">Savings Goal</a>
+        </div>
+      </div>
+
+      <!-- ================= CALCULATORS ================= -->
+      <div class="tools-head" id="calculators">
+        <h2>Calculators</h2>
+        <div class="currency-ctl">
+          <label for="currencySel">Currency</label>
+          <select id="currencySel">
+            <option value="PKR" selected>PKR — Pakistani Rupee</option>
+            <option value="USD">USD — US Dollar</option>
+            <option value="INR">INR — Indian Rupee</option>
+            <option value="GBP">GBP — British Pound</option>
+            <option value="EUR">EUR — Euro</option>
+            <option value="AED">AED — UAE Dirham</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="tabs" role="tablist" aria-label="Choose a calculator">
+        <button class="tab" role="tab" id="tab-emi" aria-controls="panel-emi" aria-selected="true" data-tab="emi">EMI Calculator</button>
+        <button class="tab" role="tab" id="tab-loan" aria-controls="panel-loan" aria-selected="false" data-tab="loan">Loan &amp; Prepayment</button>
+        <button class="tab" role="tab" id="tab-compound" aria-controls="panel-compound" aria-selected="false" data-tab="compound">Compound Interest</button>
+        <button class="tab" role="tab" id="tab-savings" aria-controls="panel-savings" aria-selected="false" data-tab="savings">Savings Goal</button>
+      </div>
+
+      <!-- EMI -->
+      <section class="panel" id="panel-emi" role="tabpanel" aria-labelledby="tab-emi">
+        <div class="panel-grid">
+          <div>
+            <h3>EMI Calculator</h3>
+            <p class="lede">Work out the fixed monthly payment (Equated Monthly Instalment) on a home, car, bike or personal loan, and see how much of the total is interest.</p>
+            <div class="field">
+              <div class="field-top">
+                <label for="emiAmount">Loan amount</label>
+                <span class="num-wrap"><input type="number" id="emiAmountNum" min="0" step="1000" value="1000000" /></span>
+              </div>
+              <input type="range" id="emiAmount" min="10000" max="20000000" step="10000" value="1000000" />
+            </div>
+            <div class="field">
+              <div class="field-top">
+                <label for="emiRate">Interest rate (per year)</label>
+                <span class="num-wrap"><input type="number" id="emiRateNum" class="small" min="0" max="60" step="0.1" value="12" /><span class="cur">%</span></span>
+              </div>
+              <input type="range" id="emiRate" min="0" max="40" step="0.1" value="12" />
+            </div>
+            <div class="field">
+              <div class="field-top">
+                <label for="emiYears">Loan tenure</label>
+                <span class="num-wrap"><input type="number" id="emiYearsNum" class="small" min="1" max="35" step="1" value="5" /><span class="cur">years</span></span>
+              </div>
+              <input type="range" id="emiYears" min="1" max="30" step="1" value="5" />
+              <p class="hint">Tenure in years — the calculator converts it to monthly payments.</p>
+            </div>
+          </div>
+          <div>
+            <div class="results" aria-live="polite">
+              <div class="big-result">
+                <div class="k">Monthly EMI</div>
+                <div class="v" id="emiMonthly">—</div>
+              </div>
+              <dl>
+                <div class="kv"><dt>Principal (loan amount)</dt><dd id="emiPrincipalOut">—</dd></div>
+                <div class="kv"><dt>Total interest</dt><dd id="emiInterestOut">—</dd></div>
+                <div class="kv"><dt>Total you repay</dt><dd id="emiTotalOut">—</dd></div>
+                <div class="kv"><dt>Number of payments</dt><dd id="emiCountOut">—</dd></div>
+              </dl>
+              <div class="chart-box">
+                <svg id="emiDonut" viewBox="0 0 200 200" role="img" aria-label="Donut chart comparing principal and interest"></svg>
+                <div class="legend">
+                  <span><i style="background:var(--accent)"></i>Principal</span>
+                  <span><i style="background:var(--chart-b)"></i>Interest</span>
+                </div>
+              </div>
+            </div>
+            <p class="note">EMI stays the same every month, but the mix changes: early payments are mostly interest, later payments are mostly principal. See the <a href="#guide-emi">EMI guide</a> for the formula and a worked example.</p>
+          </div>
+        </div>
+      </section>
+
+      <!-- LOAN -->
+      <section class="panel" id="panel-loan" role="tabpanel" aria-labelledby="tab-loan" hidden>
+        <div class="panel-grid">
+          <div>
+            <h3>Loan &amp; Prepayment Calculator</h3>
+            <p class="lede">A full amortization view of a loan — plus the one lever most borrowers never test: paying a small extra amount every month and watching the interest fall.</p>
+            <div class="field">
+              <div class="field-top">
+                <label for="loanAmount">Loan amount</label>
+                <span class="num-wrap"><input type="number" id="loanAmountNum" min="0" step="1000" value="2500000" /></span>
+              </div>
+              <input type="range" id="loanAmount" min="10000" max="30000000" step="10000" value="2500000" />
+            </div>
+            <div class="field">
+              <div class="field-top">
+                <label for="loanRate">Interest rate (per year)</label>
+                <span class="num-wrap"><input type="number" id="loanRateNum" class="small" min="0" max="60" step="0.1" value="18" /><span class="cur">%</span></span>
+              </div>
+              <input type="range" id="loanRate" min="0" max="40" step="0.1" value="18" />
+            </div>
+            <div class="field">
+              <div class="field-top">
+                <label for="loanYears">Loan tenure</label>
+                <span class="num-wrap"><input type="number" id="loanYearsNum" class="small" min="1" max="35" step="1" value="7" /><span class="cur">years</span></span>
+              </div>
+              <input type="range" id="loanYears" min="1" max="30" step="1" value="7" />
+            </div>
+            <div class="field">
+              <div class="field-top">
+                <label for="loanExtra">Extra payment every month</label>
+                <span class="num-wrap"><input type="number" id="loanExtraNum" min="0" step="500" value="5000" /></span>
+              </div>
+              <input type="range" id="loanExtra" min="0" max="100000" step="500" value="5000" />
+              <p class="hint">Set to 0 to see the plain schedule. Extra payments go straight to principal.</p>
+            </div>
+          </div>
+          <div>
+            <div class="results" aria-live="polite">
+              <div class="big-result">
+                <div class="k">Interest saved by prepaying</div>
+                <div class="v" id="loanSaved">—</div>
+              </div>
+              <dl>
+                <div class="kv"><dt>Monthly payment (EMI)</dt><dd id="loanEmiOut">—</dd></div>
+                <div class="kv"><dt>Loan clears in</dt><dd id="loanPayoffOut">—</dd></div>
+                <div class="kv"><dt>Time saved</dt><dd id="loanTimeSavedOut">—</dd></div>
+                <div class="kv"><dt>Total interest with extra</dt><dd id="loanInterestOut">—</dd></div>
+                <div class="kv"><dt>Total interest without extra</dt><dd id="loanInterestBaseOut">—</dd></div>
+              </dl>
+            </div>
+            <details class="table-toggle">
+              <summary>Year-by-year amortization schedule</summary>
+              <table>
+                <thead><tr><th>Year</th><th>Principal paid</th><th>Interest paid</th><th>Balance left</th></tr></thead>
+                <tbody id="loanScheduleBody"></tbody>
+              </table>
+              <p class="note">All amounts are in the currency selected above.</p>
+            </details>
+            <p class="note">The schedule assumes extra payments start in month one and the interest rate stays fixed. If your loan has a floating rate or a prepayment penalty, check the effect with your lender — see <a href="#article-prepay">when prepaying makes sense</a>.</p>
+          </div>
+        </div>
+      </section>
+
+      <!-- COMPOUND -->
+      <section class="panel" id="panel-compound" role="tabpanel" aria-labelledby="tab-compound" hidden>
+        <div class="panel-grid">
+          <div>
+            <h3>Compound Interest Calculator</h3>
+            <p class="lede">See what a lump sum plus regular monthly deposits can grow into when the returns themselves start earning returns.</p>
+            <div class="field">
+              <div class="field-top">
+                <label for="compPrincipal">Starting amount</label>
+                <span class="num-wrap"><input type="number" id="compPrincipalNum" min="0" step="1000" value="100000" /></span>
+              </div>
+              <input type="range" id="compPrincipal" min="0" max="5000000" step="5000" value="100000" />
+            </div>
+            <div class="field">
+              <div class="field-top">
+                <label for="compMonthly">Monthly deposit</label>
+                <span class="num-wrap"><input type="number" id="compMonthlyNum" min="0" step="500" value="10000" /></span>
+              </div>
+              <input type="range" id="compMonthly" min="0" max="200000" step="1000" value="10000" />
+            </div>
+            <div class="field">
+              <div class="field-top">
+                <label for="compRate">Expected return (per year)</label>
+                <span class="num-wrap"><input type="number" id="compRateNum" class="small" min="0" max="40" step="0.1" value="10" /><span class="cur">%</span></span>
+              </div>
+              <input type="range" id="compRate" min="0" max="30" step="0.1" value="10" />
+            </div>
+            <div class="field">
+              <div class="field-top">
+                <label for="compYears">Time period</label>
+                <span class="num-wrap"><input type="number" id="compYearsNum" class="small" min="1" max="50" step="1" value="10" /><span class="cur">years</span></span>
+              </div>
+              <input type="range" id="compYears" min="1" max="40" step="1" value="10" />
+            </div>
+            <div class="field">
+              <label for="compFreq">Compounding frequency</label>
+              <select id="compFreq">
+                <option value="12" selected>Monthly</option>
+                <option value="4">Quarterly</option>
+                <option value="2">Half-yearly</option>
+                <option value="1">Yearly</option>
+              </select>
+            </div>
+          </div>
+          <div>
+            <div class="results" aria-live="polite">
+              <div class="big-result">
+                <div class="k">Value at the end</div>
+                <div class="v" id="compFuture">—</div>
+              </div>
+              <dl>
+                <div class="kv"><dt>Total you put in</dt><dd id="compContribOut">—</dd></div>
+                <div class="kv"><dt>Interest / growth earned</dt><dd id="compInterestOut">—</dd></div>
+                <div class="kv"><dt>Growth share of final value</dt><dd id="compShareOut">—</dd></div>
+              </dl>
+              <div class="chart-box">
+                <svg id="compChart" viewBox="0 0 640 280" role="img" aria-label="Line chart of savings balance growing year by year"></svg>
+                <div class="legend">
+                  <span><i style="background:var(--accent)"></i>Total balance</span>
+                  <span><i style="background:var(--chart-b)"></i>Your deposits</span>
+                </div>
+              </div>
+            </div>
+            <details class="table-toggle">
+              <summary>Year-by-year growth table</summary>
+              <table>
+                <thead><tr><th>Year</th><th>You put in</th><th>Growth earned</th><th>Balance</th></tr></thead>
+                <tbody id="compTableBody"></tbody>
+              </table>
+              <p class="note">All amounts are in the currency selected above.</p>
+            </details>
+            <p class="note">Returns are assumed to be perfectly smooth, which real investments never are. Treat the result as a planning estimate, not a promise — the <a href="#guide-compound">compound interest guide</a> explains why.</p>
+          </div>
+        </div>
+      </section>
+
+      <!-- SAVINGS -->
+      <section class="panel" id="panel-savings" role="tabpanel" aria-labelledby="tab-savings" hidden>
+        <div class="panel-grid">
+          <div>
+            <h3>Savings Goal Calculator</h3>
+            <p class="lede">Saving for a car, a wedding, a house deposit or an emergency fund? Enter the target and find out when you will get there — and what it would take to get there sooner.</p>
+            <div class="field">
+              <div class="field-top">
+                <label for="savGoal">Savings goal</label>
+                <span class="num-wrap"><input type="number" id="savGoalNum" min="0" step="1000" value="500000" /></span>
+              </div>
+              <input type="range" id="savGoal" min="10000" max="10000000" step="10000" value="500000" />
+            </div>
+            <div class="field">
+              <div class="field-top">
+                <label for="savCurrent">Already saved</label>
+                <span class="num-wrap"><input type="number" id="savCurrentNum" min="0" step="1000" value="50000" /></span>
+              </div>
+              <input type="range" id="savCurrent" min="0" max="5000000" step="5000" value="50000" />
+            </div>
+            <div class="field">
+              <div class="field-top">
+                <label for="savMonthly">Monthly saving</label>
+                <span class="num-wrap"><input type="number" id="savMonthlyNum" min="0" step="500" value="20000" /></span>
+              </div>
+              <input type="range" id="savMonthly" min="0" max="300000" step="1000" value="20000" />
+            </div>
+            <div class="field">
+              <div class="field-top">
+                <label for="savRate">Return on savings (per year)</label>
+                <span class="num-wrap"><input type="number" id="savRateNum" class="small" min="0" max="40" step="0.1" value="8" /><span class="cur">%</span></span>
+              </div>
+              <input type="range" id="savRate" min="0" max="25" step="0.1" value="8" />
+              <p class="hint">Use 0% for cash under the mattress, a savings-account rate for a bank account, or a cautious expected return for investments.</p>
+            </div>
+            <div class="field">
+              <div class="field-top">
+                <label for="savTargetYears">Or: reach the goal in</label>
+                <span class="num-wrap"><input type="number" id="savTargetYearsNum" class="small" min="1" max="40" step="1" value="2" /><span class="cur">years</span></span>
+              </div>
+              <input type="range" id="savTargetYears" min="1" max="30" step="1" value="2" />
+            </div>
+          </div>
+          <div>
+            <div class="results" aria-live="polite">
+              <div class="big-result">
+                <div class="k">You reach your goal in</div>
+                <div class="v" id="savTime">—</div>
+              </div>
+              <dl>
+                <div class="kv"><dt>Goal reached around</dt><dd id="savDateOut">—</dd></div>
+                <div class="kv"><dt>Total you will deposit</dt><dd id="savDepositsOut">—</dd></div>
+                <div class="kv"><dt>Growth that helps you</dt><dd id="savGrowthOut">—</dd></div>
+                <div class="kv"><dt>Monthly saving for your target date</dt><dd id="savNeededOut">—</dd></div>
+              </dl>
+              <div class="chart-box">
+                <div class="k" style="font-size:.85rem;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--muted)">Progress so far</div>
+                <div class="progress"><div id="savProgressBar" style="width:0%"></div></div>
+                <div class="legend"><span id="savProgressText">—</span></div>
+              </div>
+            </div>
+            <p class="note">The date assumes you save the same amount every month without a break. Missed months push the date back — consistency beats intensity, as the <a href="#guide-savings">savings guide</a> explains.</p>
+          </div>
+        </div>
+      </section>
+
+      <!-- ================= GUIDES ================= -->
+      <section class="block" id="guides">
+        <div class="block-head">
+          <h2>Guides — how each calculator works</h2>
+          <p>A calculator you cannot check is just a number on a screen. Each guide below gives the exact formula our tools use, a worked example you can verify with a pencil, and the mistakes people most often make with it.</p>
+        </div>
+        <div class="guide-grid">
+          <div class="card" id="guide-emi">
+            <h3>EMI guide: the reducing-balance formula</h3>
+            <p>EMI stands for Equated Monthly Instalment. On a standard reducing-balance loan you pay the same amount every month, calculated with this formula:</p>
+            <div class="formula">EMI = P × r × (1 + r)<sup>n</sup> ÷ ((1 + r)<sup>n</sup> − 1)</div>
+            <p>Here <strong>P</strong> is the loan amount, <strong>r</strong> is the monthly interest rate (annual rate ÷ 12 ÷ 100), and <strong>n</strong> is the number of monthly payments. Each month, interest is charged only on the balance still outstanding — that is what "reducing balance" means — so the interest part of your EMI shrinks over time while the principal part grows.</p>
+            <div class="example">
+              <strong>Worked example</strong>
+              A loan of 1,000,000 at 12% per year for 5 years: r = 0.01 and n = 60. The formula gives an EMI of about 22,244 per month. Over 60 payments you repay roughly 1,334,667 in total, so the loan costs about 334,667 in interest — a third of the amount borrowed, even at a modest rate.
+            </div>
+            <ul>
+              <li>A longer tenure lowers the EMI but raises the total interest — often sharply.</li>
+              <li>Compare loans on total repayment, not on EMI alone; a "cheap" monthly payment can hide an expensive loan.</li>
+              <li>Beware flat-rate quotes: a flat rate charges interest on the full amount for the whole term and costs roughly double what the same number suggests on a reducing-balance loan.</li>
+            </ul>
+          </div>
+
+          <div class="card" id="guide-loan">
+            <h3>Loan guide: amortization and prepayment</h3>
+            <p>An amortization schedule is the loan's month-by-month diary: how much of each payment was interest, how much was principal, and what balance remains. Two facts stand out in almost every schedule. First, the early years are interest-heavy — on a long loan, most of your first payments barely touch the principal. Second, anything extra you pay goes entirely to principal, which reduces every future interest charge.</p>
+            <p>That is why small prepayments punch above their weight. Extra money paid in year one removes principal that would otherwise have been charged interest for the entire remaining term.</p>
+            <div class="example">
+              <strong>Worked example</strong>
+              On a 2,500,000 loan at 18% over 7 years, the EMI is about 52,544. Adding just 5,000 extra per month — under 10% more — clears the loan roughly a year early and saves interest in the hundreds of thousands. Run your own numbers in the Loan &amp; Prepayment calculator above.
+            </div>
+            <ul>
+              <li>Ask your lender whether prepayment penalties apply before paying extra.</li>
+              <li>Prepaying the highest-interest debt first (usually credit cards, then personal loans) saves the most.</li>
+              <li>Keep an emergency fund first — money prepaid into a loan is hard to get back in a crisis.</li>
+            </ul>
+          </div>
+
+          <div class="card" id="guide-compound">
+            <h3>Compound interest guide: interest on interest</h3>
+            <p>Simple interest is paid only on your original deposit. Compound interest is paid on the deposit <em>plus</em> all the interest already earned — which is why growth curves bend upwards instead of running in a straight line.</p>
+            <div class="formula">A = P × (1 + r ÷ m)<sup>m × t</sup></div>
+            <p><strong>A</strong> is the final amount, <strong>P</strong> the starting amount, <strong>r</strong> the annual rate, <strong>m</strong> how many times a year interest is added, and <strong>t</strong> the years. Our calculator adds your monthly deposits on top of this, month by month. More frequent compounding helps slightly, but the two levers that matter far more are the rate and, above all, the time you give it.</p>
+            <div class="example">
+              <strong>Worked example</strong>
+              100,000 at 10% per year, compounded yearly, for 10 years grows to about 259,374 — the interest (159,374) ends up larger than the original deposit. Leave it 20 years and it becomes about 672,750: the second decade adds more than twice as much as the first.
+            </div>
+            <ul>
+              <li>The Rule of 72 estimates doubling time: 72 ÷ annual rate. At 9%, money doubles roughly every 8 years.</li>
+              <li>Starting 5 years earlier usually beats depositing more later.</li>
+              <li>Real returns vary year to year and can be negative; a calculator's smooth curve is a planning tool, not a forecast.</li>
+            </ul>
+          </div>
+
+          <div class="card" id="guide-savings">
+            <h3>Savings guide: turning a goal into a monthly habit</h3>
+            <p>A savings goal is just three numbers: the target, what you already have, and what you can set aside each month. The calculator runs those numbers forward month by month — adding your deposit, then applying one month of growth — until the balance crosses the target. If you instead fix the date, it works backwards to the monthly amount that date demands.</p>
+            <p>Two practical lessons fall out of the maths. First, the required monthly amount climbs steeply as the deadline shrinks, because there are fewer months for growth to help. Second, most goals fail not on the amount but on interruptions — which is why automating the transfer for the day after payday works better than saving "whatever is left".</p>
+            <ul>
+              <li>Name the goal and keep it in a separate account so it does not quietly get spent.</li>
+              <li>Raise the deposit with every pay rise, even by a small percentage.</li>
+              <li>For goals under a year away, favour safety over return — a market dip at the wrong moment costs more than the interest earns.</li>
+            </ul>
+          </div>
+        </div>
+      </section>
+
+      <!-- ================= ARTICLES ================= -->
+      <section class="block" id="articles">
+        <div class="block-head">
+          <h2>Articles</h2>
+          <p>Short, plain-language explainers on the decisions behind the calculators. Tap a headline to read the full article.</p>
+        </div>
+
+        <article class="long" id="article-budget">
+          <details>
+            <summary>
+              <h3>The 50/30/20 budget: a starting point, not a law</h3>
+              <span class="dek">Divide after-tax income into needs, wants and savings — then adjust it to the city and family you actually live in.</span>
+              <span class="open-hint">Read article</span>
+            </summary>
+            <div class="body">
+              <p>The 50/30/20 rule is the most quoted budgeting framework in personal finance: spend roughly <strong>50% of your after-tax income on needs</strong> (rent, groceries, utilities, transport, minimum loan payments), <strong>30% on wants</strong> (eating out, entertainment, subscriptions, upgrades), and <strong>20% on savings and extra debt repayment</strong>. Its virtue is not precision — it is that you can apply it in five minutes with one bank statement.</p>
+              <h4>How to apply it honestly</h4>
+              <p>Start by sorting last month's real spending, not the spending you wish you had done. Most people discover their "needs" are quietly padded with wants: the premium grocery brands, the second car, the data package three sizes too big. That is not a failure — it is exactly the information the exercise exists to produce. Move one item at a time rather than attempting a perfect budget in a single month.</p>
+              <h4>When the numbers do not fit</h4>
+              <p>In high-rent cities, needs can swallow 65–70% of income, and no amount of discipline fixes arithmetic. In that case treat 50/30/20 as a direction rather than a destination: the useful target becomes the savings slice. Even moving from 3% to 8% saved transforms what the <a href="#calculators" data-jump="savings">Savings Goal calculator</a> says about your future. Conversely, if your needs are genuinely low, push savings well past 20% — the rule is a floor for saving, not a ceiling.</p>
+              <h4>The part people skip</h4>
+              <p>"Savings" in the 20% includes debt prepayment above the minimum, because interest avoided is a guaranteed return. Paying extra against an 18% loan beats earning 10% on a deposit every single time. Work through your debts with the <a href="#calculators" data-jump="loan">Loan &amp; Prepayment calculator</a> before deciding where the 20% goes.</p>
+            </div>
+          </details>
+        </article>
+
+        <article class="long" id="article-emergency">
+          <details>
+            <summary>
+              <h3>Emergency fund: how much is enough, and where to keep it</h3>
+              <span class="dek">Three to six months of expenses is the standard answer — but the right number depends on how replaceable your income is.</span>
+              <span class="open-hint">Read article</span>
+            </summary>
+            <div class="body">
+              <p>An emergency fund is not an investment. It is insurance you hold yourself, and its job is to stop a bad month — a lost job, a medical bill, a car that dies — from becoming expensive debt. Every financial crisis that ends in a high-interest loan began as a smaller crisis that had to be borrowed through.</p>
+              <h4>Sizing the fund</h4>
+              <p>The standard guidance is <strong>three to six months of essential expenses</strong> — not income: rent, food, utilities, transport and minimum payments. Lean towards three months if you have a stable salaried job, a working partner, and family you could fall back on. Lean towards six or more if you are self-employed, the sole earner, work in a shrinking industry, or have dependants with health needs. Freelancers with irregular income should also smooth the definition: build the fund from your average month, and let good months top it up.</p>
+              <h4>Where it should sit</h4>
+              <p>The fund must be <strong>boring and reachable</strong>: an ordinary savings account, or a money-market style account you can withdraw from within a day or two. It should not be in stocks (which fall exactly when jobs disappear), not locked in a fixed deposit with early-withdrawal penalties, and not lent to relatives. The interest it earns is a minor bonus; use the <a href="#calculators" data-jump="compound">Compound Interest calculator</a> if you want to see it, but do not chase return with this money.</p>
+              <h4>Building it without misery</h4>
+              <p>Set a first milestone of one month of expenses — reachable fast enough to keep motivation alive — then automate a transfer for the day after payday. After any withdrawal, refilling the fund becomes the top savings priority until it is whole again. Use the <a href="#calculators" data-jump="savings">Savings Goal calculator</a> with your target and monthly amount to get a realistic date.</p>
+            </div>
+          </details>
+        </article>
+
+        <article class="long" id="article-prepay">
+          <details>
+            <summary>
+              <h3>Prepay the loan or invest the spare cash?</h3>
+              <span class="dek">The maths compares a guaranteed return against an uncertain one — and your sleep is a legitimate input.</span>
+              <span class="open-hint">Read article</span>
+            </summary>
+            <div class="body">
+              <p>Every month some households face a happy problem: a little money left over. Two good uses compete for it — pay down a loan early, or invest. The comparison starts with a simple observation: <strong>prepaying a loan earns you exactly the loan's interest rate, guaranteed and tax-free</strong>. Prepaying an 18% personal loan is an 18% risk-free return. Almost no investment offers that honestly.</p>
+              <h4>When prepaying wins</h4>
+              <ul>
+                <li>The loan rate is higher than the return you could realistically and safely earn — true for credit cards and most personal loans.</li>
+                <li>The loan is in its early years, when balances (and therefore interest charges) are largest.</li>
+                <li>Being debt-free would change your decisions for the better — taking a better job, starting a business, sleeping properly.</li>
+              </ul>
+              <h4>When investing can win</h4>
+              <ul>
+                <li>The loan is cheap (a subsidised mortgage or low-rate auto loan) and the term is long, while your investment horizon is also long.</li>
+                <li>Your employer or a government scheme adds matching contributions or tax relief that beats the loan rate.</li>
+                <li>You already hold a full emergency fund, so the invested money will not be needed in a hurry.</li>
+              </ul>
+              <p>Run both sides before deciding: the <a href="#calculators" data-jump="loan">Loan &amp; Prepayment calculator</a> shows the interest a given extra payment saves, and the <a href="#calculators" data-jump="compound">Compound Interest calculator</a> shows what the same monthly amount might grow into. Compare the guaranteed saving with the <em>expected</em> — never promised — investment growth, and be honest about which risk you are actually comfortable carrying.</p>
+            </div>
+          </details>
+        </article>
+
+        <article class="long" id="article-rate">
+          <details>
+            <summary>
+              <h3>Flat rate vs reducing balance: the 2× trap in loan ads</h3>
+              <span class="dek">A "10% flat" loan can cost more than a 17% reducing-balance loan. Here is how to spot the difference before you sign.</span>
+              <span class="open-hint">Read article</span>
+            </summary>
+            <div class="body">
+              <p>Two loans can both advertise "10%" and cost wildly different amounts, because the percentage is calculated on different things. On a <strong>reducing-balance</strong> loan, interest each month is charged only on what you still owe. On a <strong>flat-rate</strong> loan, interest is charged on the original amount for the entire term — even in the final month, when you have almost repaid it.</p>
+              <h4>A concrete comparison</h4>
+              <p>Borrow 300,000 for 3 years. At <strong>10% flat</strong>, total interest is 300,000 × 10% × 3 = 90,000, and the monthly payment is (300,000 + 90,000) ÷ 36 = 10,833. At <strong>10% reducing balance</strong>, the EMI from our <a href="#calculators" data-jump="emi">EMI calculator</a> is about 9,681 and total interest is roughly 48,500. Same headline rate — the flat loan costs nearly double. As a rough conversion, a flat rate behaves like a reducing-balance rate of about 1.8–1.9 times as much.</p>
+              <h4>Questions to ask any lender</h4>
+              <ul>
+                <li>"Is this rate flat or reducing balance?" If the answer is evasive, assume flat.</li>
+                <li>"What is the total amount I will repay over the full term?" Compare loans on this number.</li>
+                <li>"Are there processing fees, insurance bundles or prepayment penalties?" A fee of 2–3% of the loan can quietly add the equivalent of several points of interest on a short loan.</li>
+                <li>"What happens if I miss a payment?" Late fees and penalty interest rates matter more than the brochure rate for many borrowers.</li>
+              </ul>
+              <p>Whenever a lender gives you a monthly payment and a term, you can reverse-engineer the truth yourself: total repayment = payment × months, and interest = total repayment − amount borrowed. If that interest looks like about double what our EMI calculator shows for the quoted rate, you are looking at a flat-rate loan.</p>
+            </div>
+          </details>
+        </article>
+      </section>
+
+      <!-- ================= FAQ ================= -->
+      <section class="block faq" id="faq">
+        <div class="block-head">
+          <h2>Frequently asked questions</h2>
+          <p>The questions readers ask us most about these calculators and the loans and savings behind them.</p>
+        </div>
+
+        <details>
+          <summary>How is an EMI calculated?</summary>
+          <div class="a">
+            <p>EMI = P × r × (1 + r)<sup>n</sup> ÷ ((1 + r)<sup>n</sup> − 1), where P is the loan amount, r is the monthly interest rate (annual rate divided by 12, then by 100), and n is the number of monthly payments. The formula is derived so that equal payments exactly retire the loan, with interest charged each month on the shrinking balance. Our <a href="#guide-emi">EMI guide</a> walks through a complete worked example.</p>
+          </div>
+        </details>
+
+        <details>
+          <summary>Why does a longer loan tenure cost so much more?</summary>
+          <div class="a">
+            <p>Because interest is charged every month on the outstanding balance, and a longer tenure keeps that balance high for longer. Doubling a loan's term rarely doubles the interest — it often more than doubles it, because in the early years of a long loan almost all of each payment is interest and the balance falls very slowly. A lower EMI is bought with a much higher total cost; compare the "total you repay" figure, not just the monthly amount.</p>
+          </div>
+        </details>
+
+        <details>
+          <summary>Is it better to reduce my EMI or reduce my tenure after a part-payment?</summary>
+          <div class="a">
+            <p>If you can afford the current EMI, reducing the tenure saves far more interest, because the balance is extinguished sooner and fewer monthly interest charges ever occur. Reducing the EMI keeps the term (and the interest meter) running just as long, only slightly slower. Choose the EMI reduction only when cash flow is genuinely tight — it is payment relief, not a saving strategy.</p>
+          </div>
+        </details>
+
+        <details>
+          <summary>What is a realistic rate of return to use in the compound interest calculator?</summary>
+          <div class="a">
+            <p>Use the rate that matches where the money actually sits: a bank savings account rate for a savings account, a term-deposit rate for a deposit, and for long-term diversified investments a cautious figure below historical averages — many planners model 8–12% per year for equity-heavy portfolios over decades, while stressing that any single decade can be far worse or better. If a scheme promises a high, guaranteed, fixed return with no risk, that is a warning sign, not an opportunity.</p>
+          </div>
+        </details>
+
+        <details>
+          <summary>Does this site store or send my financial data anywhere?</summary>
+          <div class="a">
+            <p>No. Every calculation runs entirely in your browser using JavaScript; the numbers you type never leave your device, are not stored, and are not sent to any server. Closing the tab erases them. See our <a href="#privacy">Privacy Policy</a> for the full details, including how advertising cookies work if ads are shown on this site in future.</p>
+          </div>
+        </details>
+
+        <details>
+          <summary>Are these calculators financial advice?</summary>
+          <div class="a">
+            <p>No. They are educational tools that apply standard formulas to the numbers you enter. They do not know your income, debts, tax position or obligations, and they cannot recommend a product or a decision. For advice about your own situation, speak to a qualified financial adviser, and always confirm rates, fees and terms with the lender or provider before signing anything.</p>
+          </div>
+        </details>
+      </section>
+
+      <!-- ================= ABOUT ================= -->
+      <section class="block" id="about">
+        <div class="policy">
+          <details open>
+            <summary>About Finance Tools</summary>
+            <div class="body">
+              <p>Finance Tools is a small, free calculator website built for one purpose: to make everyday loan and savings maths transparent. Banks and lenders quote monthly payments; this site shows the whole picture — total interest, amortization schedules, growth tables and the formulas underneath — so a borrower or saver can check any quote independently before signing.</p>
+              <p>The site offers four calculators — EMI, loan amortization with prepayment, compound interest, and savings goals — supported by guides and articles that explain the concepts in plain language with worked examples. All content is original and written for this site.</p>
+              <p>Everything runs in your browser. There are no accounts, no uploads and no data collection from the calculators themselves, and the tools are free to use as often as you like.</p>
+            </div>
+          </details>
+        </div>
+
+        <!-- ================= PRIVACY ================= -->
+        <div class="policy" id="privacy">
+          <details>
+            <summary>Privacy Policy</summary>
+            <div class="body">
+              <p><strong>Last updated: 10 November 2026.</strong> This Privacy Policy explains what information this website does and does not collect, how cookies are used, and the choices you have.</p>
+              <h4>Calculators and your data</h4>
+              <p>All calculators on this site run entirely in your own browser. The figures you enter are never transmitted to us or to any third party, are never stored, and disappear when you close the page. We have no user accounts and no registration.</p>
+              <h4>Advertising and cookies</h4>
+              <p>This site may display advertising served by Google AdSense. Third-party vendors, including Google, use cookies to serve ads based on a user's prior visits to this website or other websites. Google's use of advertising cookies enables it and its partners to serve ads to users based on their visit to this site and/or other sites on the Internet.</p>
+              <p>You may opt out of personalised advertising by visiting <a href="https://adssettings.google.com/authenticated" rel="noopener" target="_blank">Google Ads Settings</a>. You can also opt out of some third-party vendors' use of cookies for personalised advertising at <a href="https://www.aboutads.info/choices/" rel="noopener" target="_blank">www.aboutads.info/choices</a>. For more about how Google uses data from sites that use its services, see <a href="https://policies.google.com/technologies/ads" rel="noopener" target="_blank">Google's advertising policies</a>.</p>
+              <p>Third-party ad servers or ad networks may use technologies such as cookies, JavaScript or web beacons in the advertisements that appear on this site, which are sent directly to your browser. They automatically receive your IP address when this occurs. These technologies are used to measure the effectiveness of advertising campaigns and/or to personalise the advertising content you see. We have no access to or control over cookies used by third-party advertisers.</p>
+              <h4>Consent (EEA, UK and Switzerland)</h4>
+              <p>Where required by law, advertising and analytics cookies are used only with your consent, collected through a certified consent management platform when ads are active. You can withdraw consent at any time through the same consent controls.</p>
+              <h4>Log files</h4>
+              <p>Like most websites, our hosting may keep standard server log files (IP address, browser type, referring page, date and time of visit) for security and operational purposes. These are not linked to any personally identifiable information.</p>
+              <h4>Children's privacy</h4>
+              <p>This site is a general-audience finance education site and is not directed at children under 13. We do not knowingly collect personal information from children under 13.</p>
+              <h4>Changes to this policy</h4>
+              <p>We may update this policy from time to time. Changes take effect when posted on this page, and the "last updated" date above will be revised.</p>
+            </div>
+          </details>
+        </div>
+
+        <!-- ================= TERMS ================= -->
+        <div class="policy" id="terms">
+          <details>
+            <summary>Terms of Use &amp; Disclaimer</summary>
+            <div class="body">
+              <p>By using this website you agree to these terms. If you do not agree, please do not use the site.</p>
+              <h4>Educational tools, not financial advice</h4>
+              <p>The calculators, guides and articles on this site are provided for general education and information only. They apply standard mathematical formulas to the figures you enter and do not constitute financial, investment, tax or legal advice, nor a recommendation of any product, lender or course of action. Results are estimates: actual loan terms, interest calculations, fees, taxes and investment returns vary by provider and over time.</p>
+              <h4>Accuracy</h4>
+              <p>We work to keep the formulas and explanations correct, but we make no warranty that results are error-free or suitable for any particular decision. Always verify important calculations and confirm rates, fees and terms directly with the lender or provider concerned, and consider advice from a qualified professional before entering into a financial commitment.</p>
+              <h4>Acceptable use</h4>
+              <p>You may use the calculators freely for personal and business planning. You may not misuse the site, attempt to disrupt it, or copy substantial parts of its content for republication without permission.</p>
+              <h4>External links</h4>
+              <p>This site links to external websites (for example, Google's privacy and advertising pages). We are not responsible for the content or privacy practices of external sites.</p>
+              <h4>Liability</h4>
+              <p>To the extent permitted by law, we are not liable for any loss arising from reliance on calculations or content provided by this site.</p>
+            </div>
+          </details>
+        </div>
+
+        <!-- ================= DMCA ================= -->
+        <div class="policy" id="dmca">
+          <details>
+            <summary>Copyright &amp; DMCA</summary>
+            <div class="body">
+              <p>All text, design and code on this site are original works and are protected by copyright. Brief quotations with a link back to this site are welcome; wholesale copying is not.</p>
+              <p>If you believe that material on this site infringes your copyright, please contact us via the <a href="#contact">contact section</a> with: your name and contact details, a description of the copyrighted work, the exact location (URL and passage) of the material you believe is infringing, and a statement that you have a good-faith belief the use is not authorised. We will review and, where the claim is valid, remove the material promptly.</p>
+            </div>
+          </details>
+        </div>
+      </section>
+
+      <!-- ================= CONTACT ================= -->
+      <section class="block" id="contact">
+        <div class="block-head">
+          <h2>Contact</h2>
+          <p>Spotted a wrong number in a worked example, or want a calculator we do not have yet? Send a message — the button opens your own email app with everything filled in, so nothing is stored on this site.</p>
+        </div>
+        <div class="contact-grid">
+          <div class="card">
+            <h3>Before you write</h3>
+            <p>Most questions about results are answered in the <a href="#guides">guides</a> and <a href="#faq">FAQ</a> — including the exact formulas, so you can check a bank's quote yourself.</p>
+            <p>Please note: we cannot give personal financial advice, recommend a loan or investment, or intervene with a lender. For those, a qualified adviser in your own country is the right contact.</p>
+            <p>For copyright matters, see the <a href="#dmca">Copyright &amp; DMCA</a> section.</p>
+          </div>
+          <div class="card">
+            <form class="contact-form" id="contactForm">
+              <label>Your name
+                <input type="text" id="cfName" autocomplete="name" required />
+              </label>
+              <label>Subject
+                <input type="text" id="cfSubject" required />
+              </label>
+              <label>Message
+                <textarea id="cfMsg" rows="5" required></textarea>
+              </label>
+              <button class="btn" type="submit">Open in my email app</button>
+              <p class="form-status" id="cfStatus" aria-live="polite"></p>
+            </form>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <footer>
+      <div class="wrap foot-in">
+        <div>
+          <h4>Finance Tools</h4>
+          <p>Free EMI, loan, compound interest and savings calculators with the formulas shown, worked examples, and plain-language guides. Educational only — not financial advice.</p>
+        </div>
+        <div>
+          <h4>Tools</h4>
+          <ul>
+            <li><a href="#calculators" data-jump="emi">EMI Calculator</a></li>
+            <li><a href="#calculators" data-jump="loan">Loan &amp; Prepayment</a></li>
+            <li><a href="#calculators" data-jump="compound">Compound Interest</a></li>
+            <li><a href="#calculators" data-jump="savings">Savings Goal</a></li>
+          </ul>
+        </div>
+        <div>
+          <h4>Site</h4>
+          <ul>
+            <li><a href="#guides">Guides</a></li>
+            <li><a href="#articles">Articles</a></li>
+            <li><a href="#faq">FAQ</a></li>
+            <li><a href="#about">About</a></li>
+            <li><a href="#privacy">Privacy Policy</a></li>
+            <li><a href="#terms">Terms of Use</a></li>
+            <li><a href="#dmca">Copyright &amp; DMCA</a></li>
+            <li><a href="#contact">Contact</a></li>
+          </ul>
+        </div>
+      </div>
+      <div class="wrap fineprint">© 2026 Finance Tools. All calculations run locally in your browser; figures are estimates for education and planning, not financial advice.</div>
+    </footer>
+
+    <script>
+      (function(){
+        "use strict";
+        var currency = "PKR";
+        var fmtCache = {};
+        function fmt(n){
+          if (!isFinite(n)) return "—";
+          if (!fmtCache[currency]) {
+            try { fmtCache[currency] = new Intl.NumberFormat("en-US",{style:"currency",currency:currency,maximumFractionDigits:0}); }
+            catch(e){ fmtCache[currency] = new Intl.NumberFormat("en-US",{maximumFractionDigits:0}); }
+          }
+          return fmtCache[currency].format(Math.round(n));
+        }
+        function fmtNum(n){
+          if (!isFinite(n)) return "—";
+          return new Intl.NumberFormat("en-US",{maximumFractionDigits:0}).format(Math.round(n));
+        }
+        function fmtShort(n){
+          if (!isFinite(n)) return "—";
+          var abs = Math.abs(n);
+          if (abs >= 1e7) return (n/1e7).toFixed(2).replace(/\.?0+$/,"") + " Cr";
+          if (abs >= 1e5) return (n/1e5).toFixed(2).replace(/\.?0+$/,"") + " L";
+          if (abs >= 1e3) return (n/1e3).toFixed(1).replace(/\.0$/,"") + "k";
+          return String(Math.round(n));
+        }
+        function num(id){ var v = parseFloat(document.getElementById(id).value); return isFinite(v) ? v : 0; }
+        function setText(id, txt){ document.getElementById(id).textContent = txt; }
+        function monthsText(m){
+          if (!isFinite(m)) return "—";
+          var y = Math.floor(m/12), r = m % 12;
+          var parts = [];
+          if (y > 0) parts.push(y + (y === 1 ? " year" : " years"));
+          if (r > 0 || y === 0) parts.push(r + (r === 1 ? " month" : " months"));
+          return parts.join(", ");
+        }
+        function emiFormula(P, annualRate, n){
+          var r = annualRate / 1200;
+          if (n <= 0) return 0;
+          if (r === 0) return P / n;
+          var f = Math.pow(1 + r, n);
+          return P * r * f / (f - 1);
+        }
+        /* Bind a range slider and a number input together */
+        function bind(pair, onChange){
+          var range = document.getElementById(pair[0]), box = document.getElementById(pair[1]);
+          range.addEventListener("input", function(){ box.value = range.value; onChange(); });
+          box.addEventListener("input", function(){
+            var v = parseFloat(box.value);
+            if (isFinite(v)) { range.value = v; }
+            onChange();
+          });
+        }
+
+        /* ---------------- Tabs ---------------- */
+        var tabs = Array.prototype.slice.call(document.querySelectorAll(".tab"));
+        function showTab(name){
+          tabs.forEach(function(t){
+            var active = t.getAttribute("data-tab") === name;
+            t.setAttribute("aria-selected", active ? "true" : "false");
+            document.getElementById("panel-" + t.getAttribute("data-tab")).hidden = !active;
+          });
+        }
+        tabs.forEach(function(t){
+          t.addEventListener("click", function(){ showTab(t.getAttribute("data-tab")); });
+        });
+        Array.prototype.forEach.call(document.querySelectorAll("[data-jump]"), function(a){
+          a.addEventListener("click", function(){ showTab(a.getAttribute("data-jump")); });
+        });
+
+        /* ---------------- EMI ---------------- */
+        function calcEmi(){
+          var P = Math.max(0, num("emiAmountNum"));
+          var rate = Math.max(0, num("emiRateNum"));
+          var years = Math.max(0, num("emiYearsNum"));
+          var n = Math.round(years * 12);
+          var e = emiFormula(P, rate, n);
+          var total = e * n, interest = total - P;
+          setText("emiMonthly", fmt(e));
+          setText("emiPrincipalOut", fmt(P));
+          setText("emiInterestOut", fmt(Math.max(0, interest)));
+          setText("emiTotalOut", fmt(total));
+          setText("emiCountOut", n + " monthly payments");
+          /* donut */
+          var svg = document.getElementById("emiDonut");
+          var C = 2 * Math.PI * 80, frac = total > 0 ? P / total : 0;
+          var pLen = C * frac;
+          svg.setAttribute("viewBox", "0 0 200 200");
+          svg.innerHTML =
+            '<circle cx="100" cy="100" r="80" fill="none" stroke="var(--chart-b)" stroke-width="30"></circle>' +
+            '<circle cx="100" cy="100" r="80" fill="none" stroke="var(--accent)" stroke-width="30" ' +
+              'stroke-dasharray="' + pLen.toFixed(1) + ' ' + C.toFixed(1) + '" transform="rotate(-90 100 100)"></circle>' +
+            '<text x="100" y="96" text-anchor="middle" font-size="13" fill="var(--muted)">Interest</text>' +
+            '<text x="100" y="124" text-anchor="middle" font-size="26" font-weight="600" fill="var(--ink)">' +
+              (total > 0 ? Math.round((1 - frac) * 100) : 0) + '%</text>';
+        }
+        bind(["emiAmount","emiAmountNum"], calcEmi);
+        bind(["emiRate","emiRateNum"], calcEmi);
+        bind(["emiYears","emiYearsNum"], calcEmi);
+
+        /* ---------------- Loan / amortization ---------------- */
+        function amortize(P, annualRate, n, extra){
+          var r = annualRate / 1200;
+          var e = emiFormula(P, annualRate, n);
+          var pay = e + Math.max(0, extra);
+          var bal = P, totalInt = 0, months = 0, rows = [];
+          var yPrin = 0, yInt = 0;
+          while (bal > 0.005 && months < 1200) {
+            var interest = bal * r;
+            var principal = pay - interest;
+            if (principal <= 0) { months = Infinity; break; }
+            if (principal > bal) { principal = bal; }
+            bal -= principal; totalInt += interest; months++;
+            yPrin += principal; yInt += interest;
+            if (months % 12 === 0 || bal <= 0.005) {
+              rows.push({ year: Math.ceil(months / 12), prin: yPrin, intr: yInt, bal: Math.max(0, bal) });
+              yPrin = 0; yInt = 0;
+            }
+          }
+          return { emi: e, months: months, totalInt: totalInt, rows: rows };
+        }
+        function calcLoan(){
+          var P = Math.max(0, num("loanAmountNum"));
+          var rate = Math.max(0, num("loanRateNum"));
+          var n = Math.round(Math.max(0, num("loanYearsNum")) * 12);
+          var extra = Math.max(0, num("loanExtraNum"));
+          var base = amortize(P, rate, n, 0);
+          var withX = amortize(P, rate, n, extra);
+          setText("loanEmiOut", fmt(base.emi));
+          setText("loanSaved", fmt(Math.max(0, base.totalInt - withX.totalInt)));
+          setText("loanPayoffOut", isFinite(withX.months) ? monthsText(withX.months) : "Never — payment too low");
+          var savedM = base.months - withX.months;
+          setText("loanTimeSavedOut", isFinite(savedM) && savedM > 0 ? monthsText(savedM) : "—");
+          setText("loanInterestOut", fmt(withX.totalInt));
+          setText("loanInterestBaseOut", fmt(base.totalInt));
+          var body = document.getElementById("loanScheduleBody");
+          var html = "";
+          withX.rows.forEach(function(row){
+            html += "<tr><td>" + row.year + "</td><td>" + fmtNum(row.prin) + "</td><td>" + fmtNum(row.intr) + "</td><td>" + fmtNum(row.bal) + "</td></tr>";
+          });
+          body.innerHTML = html;
+        }
+        bind(["loanAmount","loanAmountNum"], calcLoan);
+        bind(["loanRate","loanRateNum"], calcLoan);
+        bind(["loanYears","loanYearsNum"], calcLoan);
+        bind(["loanExtra","loanExtraNum"], calcLoan);
+
+        /* ---------------- Compound interest ---------------- */
+        function calcCompound(){
+          var P = Math.max(0, num("compPrincipalNum"));
+          var monthly = Math.max(0, num("compMonthlyNum"));
+          var rate = Math.max(0, num("compRateNum")) / 100;
+          var years = Math.max(0, Math.round(num("compYearsNum")));
+          var m = parseInt(document.getElementById("compFreq").value, 10) || 12;
+          var bal = P, contributed = P;
+          /* Precise period-by-period computation: deposits spread evenly
+             across the periods of each year, growth applied per period. */
+          var perRate = rate / m, periodsPerYear = m, totalPeriods = Math.round(m * years);
+          var monthsPerPeriod = 12 / m;
+          var depPerPeriod = monthly * monthsPerPeriod;
+          var yearEnd = [];
+          for (var p = 1; p <= totalPeriods; p++) {
+            bal += depPerPeriod; contributed += depPerPeriod;
+            bal *= (1 + perRate);
+            if (p % periodsPerYear === 0) yearEnd.push({ year: p / periodsPerYear, bal: bal, contrib: contributed });
+          }
+          var growth = bal - contributed;
+          setText("compFuture", fmt(bal));
+          setText("compContribOut", fmt(contributed));
+          setText("compInterestOut", fmt(Math.max(0, growth)));
+          setText("compShareOut", bal > 0 ? Math.round(Math.max(0, growth) / bal * 100) + "%" : "0%");
+          /* table */
+          var tbody = document.getElementById("compTableBody");
+          var thtml = "";
+          yearEnd.forEach(function(rw){
+            thtml += "<tr><td>" + rw.year + "</td><td>" + fmtNum(rw.contrib) + "</td><td>" + fmtNum(Math.max(0, rw.bal - rw.contrib)) + "</td><td>" + fmtNum(rw.bal) + "</td></tr>";
+          });
+          tbody.innerHTML = thtml;
+          /* chart */
+          var svg = document.getElementById("compChart");
+          var W = 640, H = 280, padL = 8, padR = 8, padT = 24, padB = 30;
+          var maxV = bal > 0 ? bal : 1;
+          var all = [{ x: 0, bal: P, contrib: P }].concat(yearEnd.map(function(rw){ return { x: rw.year, bal: rw.bal, contrib: rw.contrib }; }));
+          function X(x){ return padL + (W - padL - padR) * (years > 0 ? x / years : 0); }
+          function Y(v){ return padT + (H - padT - padB) * (1 - v / maxV); }
+          var lineBal = "", lineCon = "";
+          all.forEach(function(pt, i){
+            lineBal += (i === 0 ? "M" : "L") + X(pt.x).toFixed(1) + "," + Y(pt.bal).toFixed(1) + " ";
+            lineCon += (i === 0 ? "M" : "L") + X(pt.x).toFixed(1) + "," + Y(pt.contrib).toFixed(1) + " ";
+          });
+          var area = lineBal + "L" + X(years).toFixed(1) + "," + Y(0).toFixed(1) + " L" + X(0).toFixed(1) + "," + Y(0).toFixed(1) + " Z";
+          svg.innerHTML =
+            '<path d="' + area + '" fill="var(--accent)" opacity="0.14"></path>' +
+            '<path d="' + lineCon + '" fill="none" stroke="var(--chart-b)" stroke-width="2.5"></path>' +
+            '<path d="' + lineBal + '" fill="none" stroke="var(--accent)" stroke-width="2.5"></path>' +
+            '<text x="' + padL + '" y="16" font-size="13" fill="var(--muted)">Peak: ' + fmtShort(maxV) + '</text>' +
+            '<text x="' + padL + '" y="' + (H - 8) + '" font-size="13" fill="var(--muted)">Year 0</text>' +
+            '<text x="' + (W - padR) + '" y="' + (H - 8) + '" font-size="13" fill="var(--muted)" text-anchor="end">Year ' + years + '</text>';
+        }
+        bind(["compPrincipal","compPrincipalNum"], calcCompound);
+        bind(["compMonthly","compMonthlyNum"], calcCompound);
+        bind(["compRate","compRateNum"], calcCompound);
+        bind(["compYears","compYearsNum"], calcCompound);
+        document.getElementById("compFreq").addEventListener("change", calcCompound);
+
+        /* ---------------- Savings goal ---------------- */
+        function calcSavings(){
+          var goal = Math.max(0, num("savGoalNum"));
+          var current = Math.max(0, num("savCurrentNum"));
+          var monthly = Math.max(0, num("savMonthlyNum"));
+          var r = Math.max(0, num("savRateNum")) / 1200;
+          var targetYears = Math.max(1, num("savTargetYearsNum"));
+          /* months to goal */
+          var bal = current, months = 0, deposits = current;
+          if (bal < goal) {
+            if (monthly <= 0 && r <= 0) { months = Infinity; }
+            else {
+              while (bal < goal && months < 1200) {
+                bal += monthly; deposits += monthly;
+                bal *= (1 + r);
+                months++;
+              }
+              if (bal < goal) months = Infinity;
+            }
+          }
+          if (isFinite(months)) {
+            setText("savTime", months === 0 ? "Already there" : monthsText(months));
+            var d = new Date(); d.setMonth(d.getMonth() + months);
+            setText("savDateOut", months === 0 ? "Today" : d.toLocaleDateString("en-GB", { month: "long", year: "numeric" }));
+            setText("savDepositsOut", fmt(deposits));
+            setText("savGrowthOut", fmt(Math.max(0, bal - deposits)));
+          } else {
+            setText("savTime", "Not on this path");
+            setText("savDateOut", "—");
+            setText("savDepositsOut", "—");
+            setText("savGrowthOut", "—");
+          }
+          /* required monthly for target date: PMT-style solve on FV of annuity + current growth */
+          var nT = Math.round(targetYears * 12);
+          var grownCurrent = current * Math.pow(1 + r, nT);
+          var remaining = goal - grownCurrent;
+          var need;
+          if (remaining <= 0) need = 0;
+          else if (r === 0) need = remaining / nT;
+          else need = remaining * r / (Math.pow(1 + r, nT) - 1) / (1 + r);
+          setText("savNeededOut", fmt(Math.max(0, need)) + " / month");
+          /* progress */
+          var pct = goal > 0 ? Math.min(100, current / goal * 100) : 0;
+          document.getElementById("savProgressBar").style.width = pct.toFixed(1) + "%";
+          setText("savProgressText", fmt(current) + " of " + fmt(goal) + " saved (" + pct.toFixed(1) + "%)");
+        }
+        bind(["savGoal","savGoalNum"], calcSavings);
+        bind(["savCurrent","savCurrentNum"], calcSavings);
+        bind(["savMonthly","savMonthlyNum"], calcSavings);
+        bind(["savRate","savRateNum"], calcSavings);
+        bind(["savTargetYears","savTargetYearsNum"], calcSavings);
+
+        /* ---------------- Currency + contact ---------------- */
+        document.getElementById("currencySel").addEventListener("change", function(){
+          currency = this.value;
+          calcEmi(); calcLoan(); calcCompound(); calcSavings();
+        });
+        document.getElementById("contactForm").addEventListener("submit", function(ev){
+          ev.preventDefault();
+          var name = document.getElementById("cfName").value.trim();
+          var subj = document.getElementById("cfSubject").value.trim();
+          var msg = document.getElementById("cfMsg").value.trim();
+          var body = encodeURIComponent(msg + "\n\n— " + name);
+          window.location.href = "mailto:ub7214715@gmail.com?subject=" + encodeURIComponent(subj) + "&body=" + body;
+          document.getElementById("cfStatus").textContent = "Your email app should now open with the message ready to send.";
+        });
+
+        calcEmi(); calcLoan(); calcCompound(); calcSavings();
+      })();
+    </script>
+  </body>
+</html>
