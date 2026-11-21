@@ -1,0 +1,136 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <meta name="color-scheme" content="light" />
+    <meta name="description" content="Free compound interest calculator with monthly deposits: future value, interest earned, yearly table and growth chart." />
+    <link rel="canonical" href="https://finance-tools-xi.vercel.app/calculators/compound-interest.html" />
+    <link rel="icon" href="data:," />
+    <title>Compound Interest Calculator — Finance Tools</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Newsreader:opsz,wght@6..72,500;6..72,600;6..72,700&family=Public+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@500;600&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="../assets/style.css" />
+  </head>
+  <body>
+<div class="topbar"><div class="wrap topbar-in"><a class="brand" href="../index.html">Finance <span>Tools</span></a><nav class="topnav"><a href="../calculators.html">Calculators</a><a href="../guides.html">Guides</a><a href="../articles.html">Articles</a><a href="../faq.html">FAQ</a><a href="../about.html">About</a><a href="../contact.html">Contact</a></nav></div></div>
+    <main id="top" class="wrap">
+<nav class="crumbs" aria-label="Breadcrumb"><a href="../index.html">Home</a> &rsaquo; <a href="../calculators.html">Calculators</a> &rsaquo; Compound Interest Calculator</nav><div class="page-head"><h1>Compound Interest Calculator</h1><p class="lede">See what savings grow into over time, with monthly deposits and a year-by-year growth table and chart.</p></div><div class="tools-head"><div class="currency-ctl">
+          <label for="currencySel">Currency</label>
+          <select id="currencySel">
+            <option value="PKR" selected>PKR — Pakistani Rupee</option>
+            <option value="USD">USD — US Dollar</option>
+            <option value="INR">INR — Indian Rupee</option>
+            <option value="GBP">GBP — British Pound</option>
+            <option value="EUR">EUR — Euro</option>
+            <option value="AED">AED — UAE Dirham</option>
+          </select>
+        </div></div><section class="panel panel-standalone" id="panel-compound">
+          <div>
+            <h3>Compound Interest Calculator</h3>
+            <p class="lede">See what a lump sum plus regular monthly deposits can grow into when the returns themselves start earning returns.</p>
+            <div class="field">
+              <div class="field-top">
+                <label for="compPrincipal">Starting amount</label>
+                <span class="num-wrap"><input type="number" id="compPrincipalNum" min="0" step="1000" value="100000" /></span>
+              </div>
+              <input type="range" id="compPrincipal" min="0" max="5000000" step="5000" value="100000" />
+            </div>
+            <div class="field">
+              <div class="field-top">
+                <label for="compMonthly">Monthly deposit</label>
+                <span class="num-wrap"><input type="number" id="compMonthlyNum" min="0" step="500" value="10000" /></span>
+              </div>
+              <input type="range" id="compMonthly" min="0" max="200000" step="1000" value="10000" />
+            </div>
+            <div class="field">
+              <div class="field-top">
+                <label for="compRate">Expected return (per year)</label>
+                <span class="num-wrap"><input type="number" id="compRateNum" class="small" min="0" max="40" step="0.1" value="10" /><span class="cur">%</span></span>
+              </div>
+              <input type="range" id="compRate" min="0" max="30" step="0.1" value="10" />
+            </div>
+            <div class="field">
+              <div class="field-top">
+                <label for="compYears">Time period</label>
+                <span class="num-wrap"><input type="number" id="compYearsNum" class="small" min="1" max="50" step="1" value="10" /><span class="cur">years</span></span>
+              </div>
+              <input type="range" id="compYears" min="1" max="40" step="1" value="10" />
+            </div>
+            <div class="field">
+              <label for="compFreq">Compounding frequency</label>
+              <select id="compFreq">
+                <option value="12" selected>Monthly</option>
+                <option value="4">Quarterly</option>
+                <option value="2">Half-yearly</option>
+                <option value="1">Yearly</option>
+              </select>
+            </div>
+          </div>
+          <div>
+            <div class="results" aria-live="polite">
+              <div class="big-result">
+                <div class="k">Value at the end</div>
+                <div class="v" id="compFuture">—</div>
+              </div>
+              <dl>
+                <div class="kv"><dt>Total you put in</dt><dd id="compContribOut">—</dd></div>
+                <div class="kv"><dt>Interest / growth earned</dt><dd id="compInterestOut">—</dd></div>
+                <div class="kv"><dt>Growth share of final value</dt><dd id="compShareOut">—</dd></div>
+              </dl>
+              <div class="chart-box">
+                <svg id="compChart" viewBox="0 0 640 280" role="img" aria-label="Line chart of savings balance growing year by year"></svg>
+                <div class="legend">
+                  <span><i style="background:var(--accent)"></i>Total balance</span>
+                  <span><i style="background:var(--chart-b)"></i>Your deposits</span>
+                </div>
+              </div>
+            </div>
+            <details class="table-toggle">
+              <summary>Year-by-year growth table</summary>
+              <table>
+                <thead><tr><th>Year</th><th>You put in</th><th>Growth earned</th><th>Balance</th></tr></thead>
+                <tbody id="compTableBody"></tbody>
+              </table>
+              <p class="note">All amounts are in the currency selected above.</p>
+            </details>
+            <p class="note">Returns are assumed to be perfectly smooth, which real investments never are. Treat the result as a planning estimate, not a promise — the <a href="../guides/compound-interest.html">compound interest guide</a> explains why.</p>
+          </div>
+        </div>
+      <div class="related"><strong>How it works:</strong> <a href="../guides/compound-interest.html">Compound interest guide: interest on interest</a><br /><strong>Also try:</strong> <a href="emi-calculator.html">EMI Calculator</a> &middot; <a href="loan-prepayment.html">Loan & Prepayment Calculator</a> &middot; <a href="savings-goal.html">Savings Goal Calculator</a></div>
+    </main>
+<footer>
+      <div class="wrap foot-in">
+        <div>
+          <h4>Finance Tools</h4>
+          <p>Free EMI, loan, compound interest and savings calculators with the formulas shown, worked examples, and plain-language guides. Educational only — not financial advice.</p>
+        </div>
+        <div>
+          <h4>Tools</h4>
+          <ul>
+            <li><a href="../calculators/emi-calculator.html">EMI Calculator</a></li>
+            <li><a href="../calculators/loan-prepayment.html">Loan &amp; Prepayment</a></li>
+            <li><a href="../calculators/compound-interest.html">Compound Interest</a></li>
+            <li><a href="../calculators/savings-goal.html">Savings Goal</a></li>
+          </ul>
+        </div>
+        <div>
+          <h4>Site</h4>
+          <ul>
+            <li><a href="../guides.html">Guides</a></li>
+            <li><a href="../articles.html">Articles</a></li>
+            <li><a href="../faq.html">FAQ</a></li>
+            <li><a href="../about.html">About</a></li>
+            <li><a href="../privacy.html">Privacy Policy</a></li>
+            <li><a href="../terms.html">Terms of Use</a></li>
+            <li><a href="../dmca.html">Copyright &amp; DMCA</a></li>
+            <li><a href="../contact.html">Contact</a></li>
+          </ul>
+        </div>
+      </div>
+      <div class="wrap fineprint">© 2026 Finance Tools. All calculations run locally in your browser; figures are estimates for education and planning, not financial advice.</div>
+    </footer>
+    <script src="../assets/calculators.js"></script>
+  </body>
+</html>
