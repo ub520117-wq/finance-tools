@@ -253,3 +253,6 @@
 .article-body p{margin:0 0 14px}
 .article-body ul{margin:0 0 14px;padding-left:22px}
 .ad-native{margin:28px auto 8px;text-align:center}
+.pin-figure{max-width:280px;margin:24px 0}
+.pin-figure img{width:100%;height:auto;border-radius:12px;box-shadow:var(--shadow)}
+.pin-figure figcaption{color:var(--muted);font-size:.9rem;margin-top:8px}
